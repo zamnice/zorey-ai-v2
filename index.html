@@ -5,8 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zorey AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --secondary: #FFE8B0;
+            --bg: #ffffff;
+            --text: #333333;
+        }
+        [data-theme="dark"] {
+            --primary: #FF9040;
+            --secondary: #5A4D41;
+            --bg: #1A1A1A;
+            --text: #F0F0F0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background 0.3s, color 0.3s;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
+        }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .header-actions button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        #chat-container {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+        .user-message {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+        }
+        .ai-message {
+            align-self: flex-start;
+            background: var(--secondary);
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: var(--secondary);
+        }
+        #user-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--text);
+        }
+        #send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+        }
+        .typing-indicator {
+            display: inline-flex;
+            gap: 5px;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            50% { opacity: 1; transform: translateY(-2px); }
+        }
+        @media (max-width: 480px) {
+            .input-area { padding: 10px; }
+            #user-input { padding: 10px 12px; }
+            #send-btn { width: 45px; height: 45px; }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,17 +131,137 @@
         </div>
     </header>
 
-    <main>
-        <div id="chat-container">
-            <div class="ai-message">Halo! Saya Zorey AI, ada yang bisa saya bantu?</div>
+    <div id="chat-container">
+        <div class="ai-message">
+            Halo! Saya Zorey AI. Ada yang bisa saya bantu?
+            <div class="typing-indicator" id="typing-indicator" style="display:none">
+                <span></span><span></span><span></span>
+            </div>
         </div>
+    </div>
 
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Tanya apa saja..." autofocus>
-            <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </main>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Tanya apa saja..." autofocus>
+        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+    </div>
 
-    <script src="script.js"></script>
+    <script>
+        class ZoreyAI {
+            constructor() {
+                this.initElements();
+                this.setupEventListeners();
+                this.loadSettings();
+            }
+
+            initElements() {
+                this.elements = {
+                    userInput: document.getElementById('user-input'),
+                    sendBtn: document.getElementById('send-btn'),
+                    chatContainer: document.getElementById('chat-container'),
+                    darkModeBtn: document.getElementById('darkmode-btn'),
+                    shareBtn: document.getElementById('share-btn'),
+                    typingIndicator: document.getElementById('typing-indicator')
+                };
+            }
+
+            setupEventListeners() {
+                // Kirim pesan
+                this.elements.sendBtn.addEventListener('click', () => this.sendMessage());
+                this.elements.userInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+
+                // Dark Mode
+                this.elements.darkModeBtn.addEventListener('click', () => this.toggleDarkMode());
+
+                // Share Chat
+                this.elements.shareBtn.addEventListener('click', () => this.shareChat());
+            }
+
+            sendMessage() {
+                const message = this.elements.userInput.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.elements.userInput.value = '';
+                
+                // Simulasi AI typing
+                this.showTyping();
+                setTimeout(() => {
+                    this.hideTyping();
+                    this.addMessage("Ini adalah balasan simulasi. Fitur API akan ditambahkan setelah ini berfungsi.", 'ai');
+                }, 1500);
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `${sender}-message message`;
+                messageDiv.textContent = text;
+                this.elements.chatContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            showTyping() {
+                this.elements.typingIndicator.style.display = 'inline-flex';
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                this.elements.typingIndicator.style.display = 'none';
+            }
+
+            scrollToBottom() {
+                this.elements.chatContainer.scrollTop = this.elements.chatContainer.scrollHeight;
+            }
+
+            toggleDarkMode() {
+                const isDark = document.body.getAttribute('data-theme') === 'dark';
+                document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                this.updateDarkModeIcon(isDark);
+            }
+
+            updateDarkModeIcon(isDark) {
+                this.elements.darkModeBtn.innerHTML = isDark ? 
+                    '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            }
+
+            shareChat() {
+                const messages = Array.from(this.elements.chatContainer.querySelectorAll('.message'))
+                    .map(msg => `${msg.classList.contains('user-message') ? 'Anda' : 'Zorey AI'}: ${msg.textContent}`)
+                    .join('\n\n');
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Chat Zorey AI',
+                        text: messages
+                    }).catch(err => {
+                        console.error('Error sharing:', err);
+                        this.copyToClipboard(messages);
+                    });
+                } else {
+                    this.copyToClipboard(messages);
+                }
+            }
+
+            copyToClipboard(text) {
+                navigator.clipboard.writeText(text)
+                    .then(() => alert('Chat berhasil disalin!'))
+                    .catch(err => console.error('Gagal menyalin:', err));
+            }
+
+            loadSettings() {
+                // Load theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.body.setAttribute('data-theme', savedTheme);
+                this.updateDarkModeIcon(savedTheme === 'dark');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            new ZoreyAI();
+        });
+    </script>
 </body>
 </html>
