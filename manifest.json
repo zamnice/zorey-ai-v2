@@ -1,0 +1,44 @@
+{
+    "name": "Zorey AI",
+    "short_name": "Zorey",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFE8B0",
+    "theme_color": "#FF6B00",
+    "description": "Chatbot AI berbasis Gemma API",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icon-maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icon-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "screenshot1.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "description": "Tampilan utama Zorey AI"
+        }
+    ]
+}
