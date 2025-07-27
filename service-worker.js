@@ -5,9 +5,10 @@ const ASSETS_TO_CACHE = [
     '/style.css',
     '/script.js',
     '/manifest.json',
-    '/icon-192x192.png',
-    '/icon-512x512.png',
-    '/preview.png'
+    '/icon.png',
+    '/favicon.ico',
+    '/logo.png',
+    '/preview-zorey.png'
 ];
 
 self.addEventListener('install', (event) => {
