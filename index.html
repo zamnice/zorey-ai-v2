@@ -29,23 +29,21 @@
             <button id="install-confirm">Pasang</button>
         </div>
     </div>
-
-    <!-- Header -->
-    <header class="header">
-        <h1>Zorey AI</h1>
-        <div class="header-actions">
-            <button id="new-chat" title="Obrolan Baru">
-                <i class="fas fa-plus"></i>
-            </button>
-            <button id="share-chat" title="Bagikan Chat">
-                <i class="fas fa-share-alt"></i>
-            </button>
-            <button id="translate-btn" title="English/Indonesia">
-                <i class="fas fa-language"></i>
-            </button>
-        </div>
-    </header>
-
+<!-- Header -->
+<header class="header">
+    <h1>Zorey AI</h1>
+    <div class="header-actions">
+        <button id="darkmode-btn" title="Dark Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button id="share-btn" title="Share Chat">
+            <i class="fas fa-share-alt"></i>
+        </button>
+        <button id="translate-btn" title="Translate">
+            <i class="fas fa-language"></i>
+        </button>
+    </div>
+</header>
     <!-- Main Content -->
     <main class="main-content">
         <!-- Welcome Screen -->
@@ -77,14 +75,15 @@
             </div>
         </div>
     </main>
+    
+<!-- Input Area (Pastikan ada di bagian bawah) -->
+<div class="input-area">
+    <input type="text" id="user-input" placeholder="Tanya apa saja...">
+    <button id="send-btn">
+        <i class="fas fa-paper-plane"></i>
+    </button>
+</div>
 
-    <!-- Input Area -->
-    <div class="input-area">
-        <input type="text" id="user-input" placeholder="Tanya apa saja..." class="gradient-placeholder">
-        <button id="send-btn">
-            <i class="fas fa-paper-plane"></i>
-        </button>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
