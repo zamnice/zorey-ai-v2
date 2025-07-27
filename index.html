@@ -14,7 +14,7 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Manifest PWA -->
-    <link rel="manifest" href="data:application/json;base64,ewogICAgIm5hbWUiOiAiWm9yZXkgQUkiLAogICAgInNob3J0X25hbWUiOiAiWm9yZXkiLAogICAgInN0YXJ0X3VybCI6ICIuIiwKICAgICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICAgImJhY2tncm91bmRfY29sb3IiOiAiI0ZGRTg4QjAiLAogICAgInRoZW1lX2NvbG9yIjogIiNGRjZCMDAiLAogICAgImljb25zIjogWwogICAgICAgIHsKICAgICAgICAgICAgInNyYyI6ICJpbWcvaWNvbi5wbmciLAogICAgICAgICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgInNyYyI6ICJpbWcvaWNvbi5wbmciLAogICAgICAgICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgICAgICB9CiAgICBdCn0=">
+    <link rel="manifest" href="manifest.json">
     
     <!-- Favicon -->
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -22,7 +22,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Embedded CSS (1500+ lines) -->
+    <!-- Embedded CSS -->
     <style>
         /* Reset & Base Styles */
         :root {
@@ -229,6 +229,42 @@
             border: 1px solid var(--border);
         }
 
+        .message-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .message-action {
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0;
+        }
+
+        .message:hover .message-action {
+            opacity: 1;
+        }
+
+        .message-action:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-message .message-action {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text);
+        }
+
         /* Markdown Styles */
         .ai-message h1, 
         .ai-message h2, 
@@ -396,6 +432,27 @@
             font-weight: 500;
         }
 
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -499,6 +556,9 @@
             <button id="install-cancel">Nanti</button>
         </div>
 
+        <!-- Toast Notification -->
+        <div class="toast" id="toast"></div>
+
         <!-- Header -->
         <header>
             <div class="logo">
@@ -553,13 +613,13 @@
         </div>
     </div>
 
-    <!-- Embedded JavaScript (3500+ lines) -->
+    <!-- Embedded JavaScript -->
     <script>
         class ZoreyAI {
             constructor() {
                 // API Configuration
                 this.API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemma-pro:generateContent";
-                this.API_KEY = process.env.GEMMA_API_KEY || this.loadApiKeyFromStorage() || this.promptForApiKey();
+                this.API_KEY = process.env.GEMMA_API_KEY || this.loadApiKeyFromStorage();
                 
                 // App State
                 this.state = {
@@ -582,7 +642,8 @@
                     shareBtn: document.getElementById('share-btn'),
                     installPrompt: document.getElementById('install-prompt'),
                     installConfirm: document.getElementById('install-confirm'),
-                    installCancel: document.getElementById('install-cancel')
+                    installCancel: document.getElementById('install-cancel'),
+                    toast: document.getElementById('toast')
                 };
 
                 // Initialize
@@ -594,6 +655,11 @@
                 this.loadPreferences();
                 this.registerServiceWorker();
                 this.setupInstallPrompt();
+                
+                // Check for API key
+                if (!this.API_KEY) {
+                    this.showToast('API Key tidak ditemukan. Beberapa fitur mungkin terbatas.');
+                }
             }
 
             setupEventListeners() {
@@ -622,34 +688,4 @@
 
                 // Install Prompt
                 this.elements.installConfirm.addEventListener('click', () => this.installApp());
-                this.elements.installCancel.addEventListener('click', () => this.hideInstallPrompt());
-            }
-
-            // API Key Management
-            loadApiKeyFromStorage() {
-                return localStorage.getItem('gemma_api_key');
-            }
-
-            promptForApiKey() {
-                const apiKey = prompt('Masukkan API Key Gemma Anda:');
-                if (apiKey) {
-                    localStorage.setItem('gemma_api_key', apiKey);
-                    return apiKey;
-                }
-                alert('API Key diperlukan untuk menggunakan fitur lengkap');
-                return null;
-            }
-
-            // Chat Functions
-            async sendMessage() {
-                const message = this.elements.userInput.value.trim();
-                if (!message || this.state.isTyping) return;
-
-                // Add user message
-                this.addMessage(message, 'user');
-                this.elements.userInput.value = '';
-                
-                // Show welcome screen if first message
-                if (this.state.chatHistory.length === 0) {
-                    this.elements.welcomeScreen.classList.add('hidden');
-                    this.elem
+                this.elements.installCancel.addEventListener('click', () => 
