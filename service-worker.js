@@ -7,7 +7,7 @@ const ASSETS_TO_CACHE = [
     '/manifest.json',
     '/icon.png',
     '/favicon.ico',
-    '/logo.png',
+    '/logo-zorey.png',
     '/preview-zorey.png'
 ];
 
