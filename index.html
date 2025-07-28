@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zorey AI - Chat Assistant</title>
+       <!-- OG Meta Tags -->
+    <meta property="og:title" content="Zorey AI - Asisten Belajar Interaktif">
+    <meta property="og:description" content="Zorey AI adalah chatbot pintar berbasis web yang siap membantu kamu dengan gaya yang ringan, cepat, dan modern. Coba sekarang!">
+    <meta property="og:image" content="img/preview-zorey.png">
+    <meta property="og:url" content="https://zorey-ai-v2.vercel.app/">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <meta name="theme-color" content="#FF6B00">
+    <title>Zorey AI - Chatbot AI Assistant</title>
     <style>
         :root {
             --primary: #FF6B00;
             --primary-dark: #E05D00;
-            --bg: #FFFFFF;
+            --bg: #FFE8B0;
             --bg-dark: #1A1A1A;
             --text: #333333;
             --text-light: #F5F5F5;
@@ -59,11 +69,13 @@
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spacing) 0;
-            margin-bottom: var(--spacing);
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          background-color: var(--bg);
+          padding: var(--spacing) 0;
+          margin-bottom: 0;
+          border-bottom: 1px solid var(--border);
         }
 
         .logo {
@@ -283,6 +295,49 @@
             opacity: 0.8;
         }
 
+        /* Tambahkan di bagian CSS */
+#install-prompt {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+#install-prompt p {
+    margin-right: 12px;
+}
+
+#install-prompt button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translate(-50%, 10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
         @media (max-width: 600px) {
             :root {
                 --spacing: 12px;
@@ -305,16 +360,7 @@
 
         <div class="chat-container" id="chat-container">
             <div class="message ai-message">
-                <strong>Zorey AI:</strong> Halo! Saya asisten AI Anda. Silakan tanyakan apa saja dan saya akan menjawab dengan format markdown yang rapi.
-                <br><br>
-                Contoh fitur markdown yang didukung:
-                <ul>
-                    <li>**Teks tebal** dan *teks miring*</li>
-                    <li>Heading (#, ##, ###)</li>
-                    <li>Kode (`inline` dan ```blok```)</li>
-                    <li>Daftar (berpoin dan bernomor)</li>
-                    <li>Blockquotes (>)</li>
-                </ul>
+                <strong> Halo, Saya Zorey AI:</strong> Halo! Saya asisten AI Anda. Silakan tanyakan apa saja dan saya akan menjawab dengan baik, daya saat ini masih dalam masa percobaan.
             </div>
         </div>
 
@@ -566,6 +612,56 @@
 
         // Initialize Zorey AI
         const zoreyAI = new ZoreyAI();
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered');
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        });
+    }
+
+    // Install Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallPrompt();
+    });
+
+    function showInstallPrompt() {
+        const installPrompt = document.createElement('div');
+        installPrompt.id = 'install-prompt';
+        installPrompt.innerHTML = `
+            <p>Pasang Zorey AI di perangkat Anda?</p>
+            <button id="install-confirm">Pasang</button>
+            <button id="install-cancel">Nanti</button>
+        `;
+        document.body.appendChild(installPrompt);
+        
+        document.getElementById('install-confirm').addEventListener('click', installApp);
+        document.getElementById('install-cancel').addEventListener('click', hideInstallPrompt);
+    }
+
+    function installApp() {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted install');
+            }
+            deferredPrompt = null;
+            hideInstallPrompt();
+        });
+    }
+
+    function hideInstallPrompt() {
+        const prompt = document.getElementById('install-prompt');
+        if (prompt) prompt.remove();
+    }
     </script>
 </body>
 </html>
