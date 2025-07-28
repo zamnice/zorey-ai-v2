@@ -618,7 +618,7 @@
             }
         }
 
-        // Initialize Zorey AI
+           // Initialize Zorey AI
         const zoreyAI = new ZoreyAI();
 
         // Register Service Worker
@@ -626,3 +626,58 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
                     .then(registration => {
+                        console.log('ServiceWorker registered');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPrompt();
+        });
+
+        function showInstallPrompt() {
+            const installPrompt = document.createElement('div');
+            installPrompt.id = 'install-prompt';
+            installPrompt.innerHTML = `
+                <p>Pasang Zorey AI di perangkat Anda?</p>
+                <button id="install-confirm">Pasang</button>
+                <button id="install-cancel">Nanti</button>
+            `;
+            document.body.appendChild(installPrompt);
+            
+            document.getElementById('install-confirm').addEventListener('click', installApp);
+            document.getElementById('install-cancel').addEventListener('click', hideInstallPrompt);
+        }
+
+        function installApp() {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(choiceResult => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted install');
+                }
+                deferredPrompt = null;
+                hideInstallPrompt();
+            });
+        }
+
+        function hideInstallPrompt() {
+            const prompt = document.getElementById('install-prompt');
+            if (prompt) prompt.remove();
+        }
+        
+        // Sembunyikan loading page setelah 3 detik
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-page').style.display = 'none';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
