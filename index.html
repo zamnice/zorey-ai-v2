@@ -124,10 +124,28 @@
             color: var(--primary);
             font-size: 1.2rem;
         }
-
-        .logo img {
-            height: 30px;
+        
+    .logo img {
+        height: 30px;
+        width: auto;
+    }
+    
+    .logo span {
+        font-family: 'Sora', sans-serif;
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+        .logo span {
+            font-size: 1rem; /* Perkecil sedikit di mobile */
         }
+        .logo img {
+            height: 25px;
+        }
+    }
 
         .header-actions {
             display: flex;
