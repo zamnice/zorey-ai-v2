@@ -473,6 +473,9 @@ header {
                     sendBtn: document.getElementById('send-btn'),
                     themeToggle: document.getElementById('theme-toggle'),
                     toast: document.getElementById('toast')
+                    installBtn: document.getElementById('install-btn'),
+                    newChatBtn: document.getElementById('new-chat-btn'),
+                    shareBtn: document.getElementById('share-btn')
                 };
 
                 this.init();
@@ -493,6 +496,9 @@ header {
                 });
                 this.elements.userInput.addEventListener('input', () => this.checkInput());
                 this.elements.themeToggle.addEventListener('click', () => this.toggleDarkMode());
+                this.elements.installBtn.addEventListener('click', () => this.showInstallPrompt());
+                this.elements.newChatBtn.addEventListener('click', () => this.startNewChat());
+                this.elements.shareBtn.addEventListener('click', () => this.shareChat());
             }
 
             async sendMessage() {
@@ -517,6 +523,45 @@ header {
                     this.removeTypingIndicator(typingId);
                 }
             }
+
+async shareChat() {
+    try {
+        if (this.state.chatHistory.length === 0) {
+            throw new Error('Tidak ada percakapan untuk dibagikan');
+        }
+        
+        const chatText = this.state.chatHistory
+            .map(msg => `Anda: ${msg.user}\nZorey: ${msg.ai}`)
+            .join('\n\n');
+        
+        if (navigator.share) {
+            await navigator.share({
+                title: 'Percakapan Zorey AI',
+                text: chatText,
+                url: window.location.href
+            });
+        } else {
+            await navigator.clipboard.writeText(chatText);
+            this.showToast('Percakapan disalin ke clipboard!');
+        }
+    } catch (error) {
+        this.showToast(error.message);
+    }
+}
+
+showInstallPrompt() {
+    if (this.state.deferredPrompt) {
+        this.state.deferredPrompt.prompt();
+        this.state.deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+                this.showToast('Aplikasi sedang dipasang...');
+            }
+            this.state.deferredPrompt = null;
+        });
+    } else {
+        this.showToast('Gunakan menu browser untuk menginstall');
+    }
+}
 
             async callAPI(prompt) {
                 if (!this.API_KEY || this.API_KEY === "YOUR_API_KEY") {
