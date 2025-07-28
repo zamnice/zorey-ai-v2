@@ -2,325 +2,55 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zorey AI - Advanced Assistant</title>
-    <meta name="description" content="Zorey AI adalah asisten AI yang siap membantu Anda">
-    
-    <!-- Meta OG -->
-    <meta property="og:title" content="Zorey AI - Advanced Assistant For Everything!">
-    <meta property="og:description" content="Chatbot pintar bergaya ceria untuk bantu kamu belajar, tanya apa aja!">
-    <meta property="og:image" content="img/preview-zorey.png">
-    <meta property="og:url" content="https://zorey-ai-v2.vercel.app">
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <!-- Manifest PWA -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Favicon -->
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Embedded CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zorey AI - API Test</title>
     <style>
-        /* Reset & Base Styles */
         :root {
             --primary: #FF6B00;
-            --primary-dark: #E05D00;
-            --secondary: #FFE8B0;
-            --secondary-dark: #E8D4A0;
             --bg: #FFFFFF;
-            --bg-dark: #1A1A1A;
             --text: #333333;
-            --text-light: #F5F5F5;
             --card: #FFFFFF;
-            --card-dark: #2A2A2A;
             --border: #E0E0E0;
-            --border-dark: #444444;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             --radius: 12px;
             --spacing: 16px;
         }
-
-        [data-theme="dark"] {
-            --primary: #FF8C42;
-            --secondary: #5A4D41;
-            --bg: var(--bg-dark);
-            --text: var(--text-light);
-            --card: var(--card-dark);
-            --border: var(--border-dark);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
+        
         body {
-            font-family: 'Segoe UI', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
-        }
-
-        /* Layout */
-        #app {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background-color: var(--primary);
-            color: white;
             padding: var(--spacing);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
         }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .logo img {
-            height: 30px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .header-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .header-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: var(--spacing);
-            padding-bottom: 80px;
-        }
-
-        /* Chat Container */
+        
         .chat-container {
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: var(--spacing);
-            margin-bottom: var(--spacing);
+            margin-bottom: 80px;
         }
-
-        .welcome-screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: var(--spacing);
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .welcome-screen h2 {
-            color: var(--primary);
-            margin-bottom: 12px;
-            font-size: 1.5rem;
-        }
-
-        .welcome-screen p {
-            max-width: 600px;
-            margin-bottom: 24px;
-            color: var(--text);
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .quick-btn {
-            padding: 12px;
-            border-radius: var(--radius);
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-            text-align: left;
-        }
-
-        .quick-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .quick-btn i {
-            font-size: 1rem;
-        }
-
-        /* Messages */
+        
         .message {
             max-width: 85%;
             padding: 12px 16px;
             border-radius: var(--radius);
-            animation: fadeInUp 0.3s ease-out;
-            position: relative;
-            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s ease-out;
         }
-
+        
         .user-message {
             align-self: flex-end;
             background-color: var(--primary);
             color: white;
-            border-bottom-right-radius: 4px;
         }
-
+        
         .ai-message {
             align-self: flex-start;
             background-color: var(--card);
-            border-bottom-left-radius: 4px;
             border: 1px solid var(--border);
         }
-
-        .message-actions {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            display: flex;
-            gap: 4px;
-        }
-
-        .message-action {
-            background: rgba(0, 0, 0, 0.2);
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            opacity: 0;
-        }
-
-        .message:hover .message-action {
-            opacity: 1;
-        }
-
-        .message-action:hover {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .ai-message .message-action {
-            background: rgba(0, 0, 0, 0.1);
-            color: var(--text);
-        }
-
-        /* Markdown Styles */
-        .ai-message h1, 
-        .ai-message h2, 
-        .ai-message h3 {
-            color: var(--primary);
-            margin: 12px 0 8px;
-        }
-
-        .ai-message p {
-            margin: 8px 0;
-            line-height: 1.6;
-        }
-
-        .ai-message strong {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .ai-message em {
-            font-style: italic;
-        }
-
-        .ai-message ul, 
-        .ai-message ol {
-            padding-left: 24px;
-            margin: 8px 0;
-        }
-
-        .ai-message li {
-            margin-bottom: 4px;
-        }
-
-        .ai-message pre {
-            background: rgba(0, 0, 0, 0.05);
-            padding: 12px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 12px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .ai-message code {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.05);
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.9rem;
-        }
-
-        .ai-message a {
-            color: var(--primary);
-            text-decoration: underline;
-        }
-
-        /* Input Area */
+        
         .input-container {
             position: fixed;
             bottom: 0;
@@ -331,57 +61,34 @@
             border-top: 1px solid var(--border);
             display: flex;
             gap: 8px;
-            z-index: 50;
+            max-width: 800px;
+            margin: 0 auto;
         }
-
+        
         #user-input {
             flex: 1;
             padding: 12px 16px;
             border: 2px solid var(--primary);
-            border-radius: 24px;
+            border-radius: var(--radius);
             font-size: 1rem;
-            background: var(--card);
-            color: var(--text);
             outline: none;
-            transition: all 0.2s;
         }
-
-        #user-input:focus {
-            border-color: var(--primary-dark);
-            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
-        }
-
+        
         #send-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            padding: 0 20px;
+            border-radius: var(--radius);
             background: var(--primary);
             color: white;
             border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
         }
-
-        #send-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        #send-btn:disabled {
-            background: #CCCCCC;
-            cursor: not-allowed;
-        }
-
-        /* Typing Indicator */
+        
         .typing-indicator {
             display: inline-flex;
             gap: 6px;
             margin-top: 8px;
         }
-
+        
         .typing-indicator span {
             display: inline-block;
             width: 8px;
@@ -391,230 +98,151 @@
             opacity: 0.4;
             animation: typingPulse 1.2s infinite ease-in-out;
         }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        /* Install Prompt */
-        #install-prompt {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            display: none;
-            align-items: center;
-            gap: 12px;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        #install-prompt p {
-            margin-right: 12px;
-        }
-
-        #install-prompt button {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* Animations */
+        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        @keyframes fadeInUp {
-            from { 
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        
         @keyframes typingPulse {
-            0%, 100% { opacity: 0.4; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(-4px); }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
         }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translate(-50%, 10px);
-            }
-            to { 
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
+        
+        /* Markdown Styles */
+        .ai-message h1, .ai-message h2, .ai-message h3 {
+            color: var(--primary);
+            margin: 12px 0 8px;
         }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            :root {
-                --spacing: 12px;
-            }
-
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .message {
-                max-width: 90%;
-            }
-
-            .input-container {
-                padding: 10px;
-            }
-
-            #user-input {
-                padding: 10px 14px;
-            }
-
-            #send-btn {
-                width: 46px;
-                height: 46px;
-            }
+        
+        .ai-message strong {
+            color: var(--primary);
         }
-
-        @media (max-width: 480px) {
-            .welcome-screen {
-                padding: 12px;
-            }
-
-            .welcome-screen h2 {
-                font-size: 1.3rem;
-            }
-
-            .header {
-                padding: 12px;
-            }
-
-            .logo {
-                font-size: 1.1rem;
-            }
-
-            .logo img {
-                height: 26px;
-            }
-
-            .header-btn {
-                width: 36px;
-                height: 36px;
-            }
+        
+        .ai-message pre {
+            background: rgba(0,0,0,0.05);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
         }
-
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
+        
+        .ai-message code {
+            font-family: monospace;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 4px;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- Install Prompt -->
-        <div id="install-prompt">
-            <p>Pasang Zorey AI di perangkat Anda?</p>
-            <button id="install-confirm">Pasang</button>
-            <button id="install-cancel">Nanti</button>
-        </div>
-
-        <!-- Toast Notification -->
-        <div class="toast" id="toast"></div>
-
-        <!-- Header -->
-        <header>
-            <div class="logo">
-                <img src="img/logo-zorey.png" alt="Zorey AI Logo">
-                <span>Zorey AI</span>
-            </div>
-            <div class="header-actions">
-                <button id="new-chat-btn" class="header-btn" title="Obrolan Baru">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button id="darkmode-btn" class="header-btn" title="Mode Gelap">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button id="share-btn" class="header-btn" title="Bagikan Chat">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main>
-            <!-- Welcome Screen -->
-            <div id="welcome-screen" class="welcome-screen">
-                <h2>Halo, Ada yang bisa saya bantu?</h2>
-                <p>Saya Zorey AI, asisten pintar Anda. Silakan ajukan pertanyaan atau pilih opsi cepat di bawah:</p>
-                
-                <div class="quick-actions">
-                    <button class="quick-btn" data-prompt="Buatkan sejarah singkat AI dalam 100 kata">
-                        <i class="fas fa-history"></i> Sejarah AI
-                    </button>
-                    <button class="quick-btn" data-prompt="Jelaskan cara kerja machine learning secara sederhana">
-                        <i class="fas fa-robot"></i> Machine Learning
-                    </button>
-                    <button class="quick-btn" data-prompt="Bantu saya membuat rencana belajar 1 minggu untuk pemrograman Python">
-                        <i class="fas fa-book"></i> Rencana Belajar
-                    </button>
-                </div>
-            </div>
-
-            <!-- Chat Container -->
-            <div id="chat-container" class="chat-container hidden">
-                <!-- Messages will be inserted here dynamically -->
-            </div>
-        </main>
-
-        <!-- Input Area -->
-        <div class="input-container">
-            <input type="text" id="user-input" placeholder="Tanya apa saja..." autocomplete="off">
-            <button id="send-btn">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+    <div class="chat-container" id="chat-container">
+        <div class="message ai-message">
+            <strong>Zorey AI:</strong> Silakan tanyakan apa saja! Saya akan mencoba menjawab dengan format markdown.
         </div>
     </div>
+    
+    <div class="input-container">
+        <input type="text" id="user-input" placeholder="Tulis pesan..." autocomplete="off">
+        <button id="send-btn">Kirim</button>
+    </div>
 
-    <!-- Embedded JavaScript -->
-    <script src="script.js"></script>
-<body>
-<html>                                                        
-                                                            
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatContainer = document.getElementById('chat-container');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            // Format markdown sederhana
+            function formatMarkdown(text) {
+                return text
+                    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/`([^`]+)`/g, '<code>$1</code>')
+                    .replace(/```([^`]+)```/gs, '<pre>$1</pre>')
+                    .replace(/\n/g, '<br>');
+            }
+            
+            // Tambah pesan ke chat
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                if (sender === 'ai') {
+                    messageDiv.innerHTML = formatMarkdown(text);
+                } else {
+                    messageDiv.textContent = text;
+                }
+                
+                chatContainer.appendChild(messageDiv);
+                messageDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Tampilkan indikator typing
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message ai-message';
+                typingDiv.id = 'typing-indicator';
+                typingDiv.innerHTML = `
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                chatContainer.appendChild(typingDiv);
+                typingDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Hapus indikator typing
+            function hideTyping() {
+                const typingElement = document.getElementById('typing-indicator');
+                if (typingElement) typingElement.remove();
+            }
+            
+            // Simulasi respon AI
+            function getAIResponse(userMessage) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // Contoh respon dengan markdown
+                        const responses = [
+                            `**Ini adalah contoh respon dengan markdown:**\n\nKode sederhana:\n\`\`\`js\nconsole.log("Hello World!");\n\`\`\``,
+                            `**Heading contoh:**\n# Judul Besar\n## Sub Judul\n### Sub Sub Judul\n\nIni teks *miring* dan **tebal**`,
+                            `**Daftar contoh:**\n- Item 1\n- Item 2\n- Item 3\n\nKode inline: \`const x = 10\``
+                        ];
+                        resolve(responses[Math.floor(Math.random() * responses.length)]);
+                    }, 1500);
+                });
+            }
+            
+            // Handler kirim pesan
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                
+                // Tambah pesan user
+                addMessage(message, 'user');
+                userInput.value = '';
+                
+                // Tampilkan indikator typing
+                showTyping();
+                
+                // Dapatkan respon AI (simulasi)
+                const response = await getAIResponse(message);
+                
+                // Hapus indikator typing dan tambah respon
+                hideTyping();
+                addMessage(response, 'ai');
+            }
+            
+            // Event listeners
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>
