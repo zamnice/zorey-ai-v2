@@ -82,6 +82,38 @@
             color: var(--primary);
             font-size: 2em;
         }
+        /* Tambahkan di bagian CSS */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+#loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--primary);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loaded #loading-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
 
         #app {
             display: flex;
@@ -410,6 +442,9 @@ header {
     </style>
 </head>
 <body>
+    <div id="loading-overlay">
+    <div id="loading-spinner"></div>
+    </div>
     <div id="loading-page">
         <img src="https://files.catbox.moe/wklj1s.png" alt="Logo">
         <h1>Zorey AI</h1>
@@ -762,6 +797,21 @@ showInstallPrompt() {
         }
         
         // Sembunyikan loading page setelah 3 detik
+        // Di dalam constructor ZoreyAI:
+    // ... kode yang sudah ada
+    
+    // Handle loading
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 1000); // Sesuaikan timeout sesuai kebutuhan
+    });
+    
+    // Fallback jika load event tidak terpicu
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 3000);
+}
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loading-page').style.display = 'none';
