@@ -94,19 +94,48 @@
             padding-bottom: 80px;
         }
 
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background-color: var(--bg);
-            padding: var(--spacing) 0;
-            margin-bottom: 0;
-            border-bottom: 2px solid #FF8B00;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            align-items: center;
-        }
+        .header-actions {
+    display: flex;
+    gap: 10px;
+}
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--bg);
+    padding: var(--spacing) 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid #FF6B00; /* Garis tebal hitam */
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+}
+.header-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
 
+.header-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .header-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+[data-theme="dark"] .header-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
         .theme-toggle {
             justify-self: end;
             display: flex;
@@ -387,10 +416,24 @@
     </div>
     <div id="app">
         <header>
-            <div class="logo">Zorey AI</div>
-            <button class="theme-toggle" id="theme-toggle">
-                <i class="fas fa-moon"></i>
+          <div class="logo">
+              <img src="img/icon.png" alt="Zorey AI Logo" width="30">
+              <span>Zorey AI</span>
+         </div>
+        <div class="header-actions">
+           <button id="new-chat-btn" class="header-btn" title="Obrolan Baru">
+              <i class="fas fa-plus"></i>
+           </button>
+           <button id="share-btn" class="header-btn" title="Bagikan Chat">
+              <i class="fas fa-share-alt"></i>
             </button>
+            <button id="install-btn" class="header-btn" title="Install App">
+              <i class="fas fa-download"></i>
+            </button>
+            <button id="theme-toggle" class="header-btn" title="Mode Gelap">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
         </header>
 
         <div class="chat-container" id="chat-container">
